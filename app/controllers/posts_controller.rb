@@ -19,6 +19,35 @@ class PostsController < ApplicationController
     end
   end
 
+  def edit
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+
+    if current_user != @post.user
+      redirect_to account_posts_path, notice: "你没有权限"
+    end
+  end
+
+  def update
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+
+    if @post.update(post_params)
+      redirect_to account_posts_path, notice: "修改成功"
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+
+    if @post.destroy
+      redirect_to account_posts_path, notice: "删除成功"
+    end
+  end
+
 
   private
 
